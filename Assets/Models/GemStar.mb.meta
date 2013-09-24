@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: bb1ce4b520cb4a842a758d36afc9b74c
+guid: e2b43fb86a30d904b97cdc48f6384bd2
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -7,8 +7,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: pCube1
-    4300002: CubeClean
+    4300000: Gem
     9500000: //RootNode
   materials:
     importMaterials: 0
@@ -41,9 +40,9 @@ ModelImporter:
     secondaryUVPackMargin: 4
   tangentSpace:
     normalSmoothAngle: 60
-    splitTangentsAcrossUV: 1
+    splitTangentsAcrossUV: 0
     normalImportMode: 0
-    tangentImportMode: 2
+    tangentImportMode: 1
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
