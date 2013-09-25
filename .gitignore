@@ -14,7 +14,9 @@
 
 # All platforms
 Temp
-Library
+Library/guidmapper
+Library/assetDatabase3
+
 *.csproj
 *.pidb
 *.unityproj
@@ -27,6 +29,3 @@ FailedAssetImports.txt
 \previews\
 \ScriptAssemblies
 obj
-
-Library/guidmapper
-Library/assetDatabase3
