@@ -5,7 +5,7 @@ using System.Linq;
 
 public class Level : SingletonComponent<Level> 
 {
-	private float moveInterval = 0.15f;
+	private float moveInterval = 0.2f;
 	private float moveTimer;
 	
 	public Tile[,] world;

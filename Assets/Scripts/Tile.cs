@@ -19,7 +19,7 @@ public class Tile : WorldObject
 	public void Initialize () 
 	{
 		var x = Mathf.RoundToInt(transform.position.x);
-		var y = Mathf.RoundToInt(transform.position.y); 
+		var y = Mathf.RoundToInt(transform.position.z); 
 		
 		pos = new Vector2int(x, y);
 	}
@@ -55,16 +55,20 @@ public class Tile : WorldObject
 		
 		bool valid = Level.Instance.AttemptMove(p.x, p.y, this);
 		
-		if(valid) MoveTile(p.x, p.y);
+		if(valid) MoveTile(p);
 		
 		return valid;
 	}
 	
-	public virtual void MoveTile(int x, int y)
+	public virtual void MoveTile(Vector2int pos)
 	{
-		transform.position = new Vector3(x, y, 0);
+		Vector3 newPos = new Vector3(pos.x, 0, pos.y);
 		
-		pos.x = x;
-		pos.y = y;
+		Vector3 dir = newPos - transform.position;
+		
+		transform.LookAt(newPos + dir);		
+		transform.position = newPos;
+		
+		this.pos = pos;
 	}
 }
