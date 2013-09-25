@@ -28,5 +28,4 @@ FailedAssetImports.txt
 /Unity/Library/*
 obj
 
-Library/*
-
+**/Library/
