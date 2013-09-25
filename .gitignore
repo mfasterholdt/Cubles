@@ -27,3 +27,6 @@ FailedAssetImports.txt
 \previews\
 \ScriptAssemblies
 obj
+
+Library/guidmapper
+Library/assetDatabase3
