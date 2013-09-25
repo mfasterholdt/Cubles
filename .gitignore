@@ -28,10 +28,4 @@ FailedAssetImports.txt
 /Unity/Library/*
 obj
 
-*/Library/
-Library/
-/Library/
-
-*/Library/*
-Library/*
-/Library/*
+Librabry
