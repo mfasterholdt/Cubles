@@ -9,6 +9,7 @@ public class Level : SingletonComponent<Level>
 	private float moveTimer;
 	
 	public Tile[,] world;
+	[HideInInspector]
 	public List<Tile> tiles;
 	
 	private int worldSize = 100;
