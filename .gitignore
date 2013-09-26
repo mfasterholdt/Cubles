@@ -15,8 +15,6 @@
 # All platforms
 Temp
 Library
-!Library/guidmapper
-!Library/assetDatabase3
 
 *.csproj
 *.pidb
