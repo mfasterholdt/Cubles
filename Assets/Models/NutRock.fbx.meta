@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 534dad747f5c74a43a6da512bb45ee1e
+guid: 45b5f083443f6174a9f116cbd5440c46
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -32,7 +32,7 @@ ModelImporter:
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 0
+    optimizeMeshForGPU: 1
     weldVertices: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
@@ -40,7 +40,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
   tangentSpace:
     normalSmoothAngle: 60
-    splitTangentsAcrossUV: 0
+    splitTangentsAcrossUV: 1
     normalImportMode: 0
     tangentImportMode: 1
   importAnimation: 1
