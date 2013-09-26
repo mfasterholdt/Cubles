@@ -1,4 +1,4 @@
-##################
+﻿##################
 # Unity ignores:
 #
 # !!! WARNING !!!
@@ -27,4 +27,5 @@ FailedAssetImports.txt
 \metadata
 \previews\
 \ScriptAssemblies
+\GFXProduction
 obj
