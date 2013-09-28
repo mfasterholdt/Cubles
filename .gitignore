@@ -1,10 +1,5 @@
-﻿##################
+##################
 # Unity ignores:
-#
-# !!! WARNING !!!
-#
-# … you MUST convert Unity to using Metafiles *before* you start using this .gitignore file,
-# or you WILL lose data!
 #
 
 # OS X only (not needed on other platforms)
@@ -14,7 +9,7 @@
 
 # All platforms
 Temp
-Library
+Library/
 
 *.csproj
 *.pidb
@@ -29,3 +24,4 @@ FailedAssetImports.txt
 \ScriptAssemblies
 \GFXProduction
 obj
+

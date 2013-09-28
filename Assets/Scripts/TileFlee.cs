@@ -8,7 +8,6 @@ public class TileFlee : Tile
 	{
 		Tile tile;
 		Vector2int p;
-		force = new Vector2int(0,0);
 		
 		for(int i=0, count=Level.AdjacentTile.Length; i < count; i++)
 		{
@@ -23,7 +22,6 @@ public class TileFlee : Tile
 			
 			if(tile != null && !tile.environment)
 			{
-				
 				p = new Vector2int(pos.x, pos.y);
 				p.x -= dir.x;
 				p.y -= dir.y;
