@@ -30,7 +30,7 @@ public class TileFlee : Tile
 				
 				if(tile != null && tile.movable)
 				{
-					tile.AddForce(-dir.x, -dir.y);
+					tile.AddForce(-dir.x, -dir.y);	
 				}
 				else
 				{
