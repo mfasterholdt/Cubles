@@ -1,24 +1,21 @@
 fileFormatVersion: 2
-guid: 111fe268dc43c9348b9dd3f17c64af74
+guid: a45623b651dc0644690cfc484e413c9e
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Char_DustHuggerArmL
-    100004: Char_DustHuggerArmR
+    100002: Char_DustBouncer
+    100004: Char_DustBouncerFeet
     400000: //RootNode
-    400002: Char_DustHuggerArmL
-    400004: Char_DustHuggerArmR
-    2300000: //RootNode
-    2300002: Char_DustHuggerArmL
-    2300004: Char_DustHuggerArmR
-    3300000: //RootNode
-    3300002: Char_DustHuggerArmL
-    3300004: Char_DustHuggerArmR
-    4300000: Char_DustHugger
-    4300002: Char_DustHuggerArmL
-    4300004: Char_DustHuggerArmR
-    7400000: Take 001
+    400002: Char_DustBouncer
+    400004: Char_DustBouncerFeet
+    2300000: Char_DustBouncer
+    2300002: Char_DustBouncerFeet
+    3300000: Char_DustBouncer
+    3300002: Char_DustBouncerFeet
+    4300000: Char_DustBouncer
+    4300002: Char_DustBouncerFeet
+    7400000: Bounce
     9500000: //RootNode
     11100000: //RootNode
   materials:
@@ -34,10 +31,10 @@ ModelImporter:
     animationScaleError: .5
     animationWrapMode: 2
     clipAnimations:
-    - name: Take 001
+    - name: Bounce
       takeName: Take 001
       firstFrame: 1
-      lastFrame: 36
+      lastFrame: 32
       wrapMode: 2
       orientationOffsetY: 0
       level: 0
