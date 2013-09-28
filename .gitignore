@@ -22,6 +22,6 @@ FailedAssetImports.txt
 \metadata
 \previews\
 \ScriptAssemblies
-\GFXProduction
+GFXProduction/
 obj
 
