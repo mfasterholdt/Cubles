@@ -28,9 +28,14 @@ public class TileFlee : Tile
 				
 				tile = Level.Instance.GetTile(p.x, p.y);
 				
-				if(tile != null && tile.movable) tile.AddForce(-dir.x, -dir.y);
-				
-				AddForce(-dir.x, -dir.y);
+				if(tile != null && tile.movable)
+				{
+					tile.AddForce(-dir.x, -dir.y);
+				}
+				else
+				{
+					AddForce(-dir.x, -dir.y);
+				}
 			}
 		}
 	}
