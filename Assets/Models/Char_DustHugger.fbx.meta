@@ -6,18 +6,23 @@ ModelImporter:
     100000: //RootNode
     100002: Char_DustHuggerArmL
     100004: Char_DustHuggerArmR
+    100006: Hat
     400000: //RootNode
     400002: Char_DustHuggerArmL
     400004: Char_DustHuggerArmR
+    400006: Hat
     2300000: //RootNode
     2300002: Char_DustHuggerArmL
     2300004: Char_DustHuggerArmR
+    2300006: Hat
     3300000: //RootNode
     3300002: Char_DustHuggerArmL
     3300004: Char_DustHuggerArmR
+    3300006: Hat
     4300000: Char_DustHugger
     4300002: Char_DustHuggerArmL
     4300004: Char_DustHuggerArmR
+    4300006: Hat
     7400000: Take 001
     9500000: //RootNode
     11100000: //RootNode

@@ -6,15 +6,20 @@ ModelImporter:
     100000: //RootNode
     100002: Char_DustBouncer
     100004: Char_DustBouncerFeet
+    100006: Helmet
     400000: //RootNode
     400002: Char_DustBouncer
     400004: Char_DustBouncerFeet
+    400006: Helmet
     2300000: Char_DustBouncer
     2300002: Char_DustBouncerFeet
+    2300004: Helmet
     3300000: Char_DustBouncer
     3300002: Char_DustBouncerFeet
+    3300004: Helmet
     4300000: Char_DustBouncer
     4300002: Char_DustBouncerFeet
+    4300004: Helmet
     7400000: Bounce
     9500000: //RootNode
     11100000: //RootNode
