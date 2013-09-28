@@ -13,7 +13,7 @@ public class Tile : WorldObject
 
 	protected Vector2int force;
 	
-	protected float moveSpeed = 12f;
+	protected float moveSpeed = 13f;
 	
 	public void Initialize () 
 	{
