@@ -15,11 +15,12 @@ public class Vector2int {
 	
 	public Vector2int (float x, float y) 
 	{
-		
+		this.x = Mathf.RoundToInt(x);
+		this.y = Mathf.RoundToInt(y);
 	}
 	
 	int sqrMagnitude
-    	{
+    {
         get { return x * x + y * y; }
     }
 	
