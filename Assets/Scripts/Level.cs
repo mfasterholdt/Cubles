@@ -21,6 +21,8 @@ public class Level : SingletonComponent<Level>
 	public static Vector2int[] AdjacentTile;
 	public Tile borderTile;
 	
+	public bool stepManually = false;
+	
 	void Start () 
 	{
 		moveTimer = 0.25f;
@@ -48,8 +50,6 @@ public class Level : SingletonComponent<Level>
 		}
 	}
 	
-	bool turnByKeystroke;
-	
 	void Update () 
 	{
 		//Handle Time
@@ -57,8 +57,8 @@ public class Level : SingletonComponent<Level>
 		//Pause Time
 		if(Input.GetKeyDown(KeyCode.Space))
 		{
-			HandleMoves();
-			turnByKeystroke = true;
+			HandleStep();
+			stepManually = true;
 		}
 		
 		//Slower
@@ -70,7 +70,7 @@ public class Level : SingletonComponent<Level>
 				moveFactor /= 2;
 			}
 			
-			turnByKeystroke = false;
+			stepManually = false;
 		}
 		
 		//Faster
@@ -82,20 +82,20 @@ public class Level : SingletonComponent<Level>
 				moveFactor *= 2;
 			}
 			
-			turnByKeystroke = false;
+			stepManually = false;
 		}
 			
 		//Time
-		if(!turnByKeystroke){
+		if(!stepManually){
 			if(Time.time > moveTimer)
 			{
-				HandleMoves();
+				HandleStep();
 				moveTimer = Time.time + moveInterval;
 			}
 		}
 	}
 	
-	void HandleMoves()
+	void HandleStep()
 	{		
 		Tile tile;
 		
@@ -107,15 +107,20 @@ public class Level : SingletonComponent<Level>
 			tile.SetTileForce();		
 		}
 		
-		//Handles moves
+		//Perform moves
 		for(int i=0, count = tiles.Count; i < count; i++)
 		{
 			tile = tiles[i];
 			
 			tile.UpdateTile();
 		}
+	}
+	
+	void MoveIteration()
+	{
 		
 	}
+	
 	
 	public Tile GetTile(int x, int y)
 	{

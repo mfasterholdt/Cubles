@@ -28,7 +28,7 @@ public class Tile : WorldObject
 	}
 	
 	public virtual void AddForce(int x, int y)
-	{		
+	{				
 		//Add force
 		force.x += x;
 		force.y += y;
@@ -78,7 +78,7 @@ public class Tile : WorldObject
 		
 		targetPos = newPos;
 		
-		//transform.position = newPos; //***instance move
+		//transform.position = newPos; //***instant move
 		
 		pos = p;
 	}
