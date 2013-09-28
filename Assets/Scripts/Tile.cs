@@ -6,15 +6,14 @@ public class Tile : WorldObject
 {
 	[HideInInspector]
 	public Vector2int pos;
+	protected Vector3 targetPos;
+	
 	public bool environment = false;
 	public bool movable = false;
-	
+
 	protected Vector2int force;
 	
-	public void Awake()
-	{
-		Initialize();
-	}
+	protected float moveSpeed = 12f;
 	
 	public void Initialize () 
 	{
@@ -22,22 +21,31 @@ public class Tile : WorldObject
 		var y = Mathf.RoundToInt(transform.position.z); 
 		
 		pos = new Vector2int(x, y);
+		
+		force = new Vector2int(0,0);
+		
+		targetPos = transform.position;
 	}
 	
 	public virtual void AddForce(int x, int y)
-	{
+	{		
 		//Add force
 		force.x += x;
 		force.y += y;
 	}
 	
-	public virtual void SetTileForce(){}
+	public virtual void SetTileForce()
+	{
+
+	}
 	
 	public virtual void UpdateTile()
 	{
-		if(force != null)
+		if(force.x != 0 || force.y != 0)
 		{
 			AttempMove(force.x, force.y);
+			force.x = 0;
+			force.y = 0;
 		}
 	}
 	
@@ -59,16 +67,33 @@ public class Tile : WorldObject
 		
 		return valid;
 	}
-	
-	public virtual void MoveTile(Vector2int pos)
+		
+	public virtual void MoveTile(Vector2int p)
 	{
-		Vector3 newPos = new Vector3(pos.x, 0, pos.y);
+		Vector3 newPos = new Vector3(p.x, 0, p.y);
 		
 		Vector3 dir = newPos - transform.position;
 		
 		transform.LookAt(newPos + dir);		
-		transform.position = newPos;
 		
-		this.pos = pos;
+		targetPos = newPos;
+		
+		//transform.position = newPos; //***instance move
+		
+		pos = p;
+	}
+	
+	
+	
+	public void Update()
+	{
+		if(transform.position != targetPos)
+		{
+			Vector3 pos = transform.position;
+			
+			pos += (targetPos-pos) * Time.deltaTime * moveSpeed * Level.Instance.moveFactor;
+			
+			transform.position = pos;
+		}
 	}
 }
