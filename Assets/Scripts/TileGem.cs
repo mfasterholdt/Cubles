@@ -5,18 +5,22 @@ public class TileGem : Tile
 {
 	public override void AddForce(int x, int y)
 	{	
-		//Propegate force
+		
 		Tile  tile = Level.Instance.GetTile(pos.x + x, pos.y + y);
 		
 		if(tile != null && tile.movable)
 		{
+			//Propegate force
 			tile.AddForce(x, y);
 		}
-		else
+		else 
 		{
-			//Add force
-			force.x += x;
-			force.y += y;
+			//Only add force on empty
+			if(tile == null)
+			{
+				force.x += x;
+				force.y += y;
+			}
 		}
 	}
 }

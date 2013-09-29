@@ -21,7 +21,7 @@ public class Level : SingletonComponent<Level>
 	public static Vector2int[] AdjacentTile;
 	public Tile borderTile;
 	
-	public bool stepManually = false;
+	private bool stepManually = false;
 	
 	void Start () 
 	{
@@ -36,7 +36,8 @@ public class Level : SingletonComponent<Level>
 	{
 		world = new Tile[worldSize, worldSize];
 		
-		Tile[] preplaced = GetComponentsInChildren<Tile>();
+		//Tile[] preplaced = GetComponentsInChildren<Tile>();
+		Tile[] preplaced = FindObjectsOfType(typeof(Tile)) as Tile[];
 		
 		for(int i=0, count = preplaced.Length; i<count; i++)
 		{
@@ -95,6 +96,8 @@ public class Level : SingletonComponent<Level>
 		}
 	}
 	
+	 
+	
 	void HandleStep()
 	{		
 		Tile tile;
@@ -108,19 +111,24 @@ public class Level : SingletonComponent<Level>
 		}
 		
 		//Perform moves
-		for(int i=0, count = tiles.Count; i < count; i++)
+		List<Tile> list;
+		
+		list = tiles.FindAll(x => !x.movable);
+		UpdateList(list);
+		
+		list = tiles.FindAll(x => x.movable);
+		UpdateList(list);		
+	}
+	
+	void UpdateList(List<Tile> list)
+	{
+		for(int i=0, count = list.Count; i < count; i++)
 		{
-			tile = tiles[i];
+			Tile tile = list[i];
 			
 			tile.UpdateTile();
 		}
 	}
-	
-	void MoveIteration()
-	{
-		
-	}
-	
 	
 	public Tile GetTile(int x, int y)
 	{
