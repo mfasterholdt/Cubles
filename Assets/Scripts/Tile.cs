@@ -6,6 +6,7 @@ public class Tile : WorldObject
 {
 	[HideInInspector]
 	public Vector2int pos;
+	
 	protected Vector3 targetPos;
 	
 	public bool environment = false;
@@ -14,6 +15,8 @@ public class Tile : WorldObject
 	protected Vector2int force;
 	
 	protected float moveSpeed = 13f;
+	
+	private bool initialized = false;
 	
 	public void Initialize () 
 	{
@@ -25,6 +28,8 @@ public class Tile : WorldObject
 		force = new Vector2int(0,0);
 		
 		targetPos = transform.position;
+		
+		initialized = true;
 	}
 	
 	public virtual void AddForce(int x, int y)
@@ -44,6 +49,7 @@ public class Tile : WorldObject
 		if(force.x != 0 || force.y != 0)
 		{
 			AttempMove(force.x, force.y);
+			
 			force.x = 0;
 			force.y = 0;
 		}
@@ -51,6 +57,11 @@ public class Tile : WorldObject
 	
 	public virtual bool AttempMove(int x, int y)
 	{
+		//Clamp force
+		force.x = Mathf.Clamp(force.x, -1, 1);
+		force.y = Mathf.Clamp(force.y, -1, 1);
+		
+		//Moves
 		Tile tileX = Level.Instance.GetTile(pos.x + force.x, pos.y);
 		if(tileX != null) force.x = 0;
 		
@@ -84,14 +95,14 @@ public class Tile : WorldObject
 	}
 	
 	
-	
 	public void Update()
 	{
 		if(transform.position != targetPos)
 		{
+			
 			Vector3 pos = transform.position;
 			
-			pos += (targetPos-pos) * Time.deltaTime * moveSpeed * Level.Instance.moveFactor;
+			pos += (targetPos-pos) * Time.fixedDeltaTime * moveSpeed * Level.Instance.moveFactor;
 			
 			transform.position = pos;
 		}
