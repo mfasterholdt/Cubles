@@ -1,11 +1,15 @@
 using UnityEngine;
+using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 public class Level : SingletonComponent<Level> 
 {
+	[HideInInspector]
 	public float moveInterval = 0.2f;
+	
+	[HideInInspector]
 	public float moveFactor = 1;
 	
 	private float moveTimer;
@@ -21,11 +25,20 @@ public class Level : SingletonComponent<Level>
 	public static Vector2int[] AdjacentTile;
 	public Tile borderTile;
 	
-	private bool stepManually = false;
+	[HideInInspector]
+	public bool stepManually;	
+	
+	private GameObject pauseText;
+	public GameObject pauseTextPrefab;
 	
 	void Start () 
 	{
-		moveTimer = 0.25f;
+		if(pauseTextPrefab)
+		{
+			pauseText = Instantiate(pauseTextPrefab) as GameObject;
+			pauseText.transform.parent = transform;
+			pauseText.name = "GUIPauseText";
+		}
 
 		RegisterWorld();
 		
@@ -60,43 +73,54 @@ public class Level : SingletonComponent<Level>
 		{
 			HandleStep();
 			stepManually = true;
+			
 		}
 		
 		//Slower
 		if(Input.GetKeyDown(KeyCode.Alpha1))
 		{
-			if(moveInterval < 0.7f)
+			if(stepManually)
+			{
+				stepManually = false;
+			}
+			else if(moveInterval < 0.7f)
 			{
 				moveInterval *= 2f;
 				moveFactor /= 2;
 			}
-			
-			stepManually = false;
 		}
 		
 		//Faster
 		if(Input.GetKeyDown(KeyCode.Alpha2))
 		{
-			if(moveInterval > 0.08f)
+			if(stepManually)
+			{
+				stepManually = false;	
+			}
+			else if(moveInterval > 0.08f)
 			{
 				moveInterval /= 2;
 				moveFactor *= 2;
 			}
-			
-			stepManually = false;
+
 		}
 			
 		//Time
-		if(!stepManually){
+		if(!stepManually)
+		{
 			if(Time.time > moveTimer)
 			{
 				HandleStep();
 				moveTimer = Time.time + moveInterval;
 			}
 		}
+		
+		//Handle GUI
+		if(pauseText.activeSelf != stepManually)
+		{
+			pauseText.SetActive(stepManually);
+		}
 	}
-	
-	 
 	
 	void HandleStep()
 	{		
@@ -153,5 +177,5 @@ public class Level : SingletonComponent<Level>
 			
 			return true;
 		}
-	}	
+	}		
 }
