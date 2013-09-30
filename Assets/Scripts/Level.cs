@@ -116,9 +116,12 @@ public class Level : SingletonComponent<Level>
 		}
 		
 		//Handle GUI
-		if(pauseText.activeSelf != stepManually)
+		if(pauseText != null)
 		{
-			pauseText.SetActive(stepManually);
+			if(pauseText.activeSelf != stepManually)
+			{
+				pauseText.SetActive(stepManually);
+			}
 		}
 	}
 	
