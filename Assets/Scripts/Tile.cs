@@ -4,19 +4,16 @@ using System.Collections.Generic;
 
 public class Tile : WorldObject 
 {
+	public bool environment = false;
+	public bool movable = false;
+	public GameObject visuals;
+	
 	[HideInInspector]
 	public Vector2int pos;
 	
 	protected Vector3 targetPos;
-	
-	public bool environment = false;
-	public bool movable = false;
-
 	protected Vector2int force;
-	
 	protected float moveSpeed = 13f;
-	
-	private bool initialized = false;
 	
 	public void Initialize () 
 	{
@@ -28,8 +25,6 @@ public class Tile : WorldObject
 		force = new Vector2int(0,0);
 		
 		targetPos = transform.position;
-		
-		initialized = true;
 	}
 	
 	public virtual void AddForce(int x, int y)
@@ -85,7 +80,14 @@ public class Tile : WorldObject
 		
 		Vector3 dir = newPos - transform.position;
 		
-		transform.LookAt(newPos + dir);		
+		if(visuals!=null)
+		{
+			visuals.transform.LookAt(newPos + dir);		
+		}
+		else
+		{
+			transform.LookAt(newPos + dir);		
+		}
 		
 		targetPos = newPos;
 		
