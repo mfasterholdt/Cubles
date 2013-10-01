@@ -17,12 +17,13 @@ public class TileFollow : Tile
 			
 			//Attractor
 			p = new Vector2int(pos.x, pos.y);
+		
 			p.x += dir.x * 2;
 			p.y += dir.y * 2;
 
 			tile = Level.Instance.GetTile(p.x, p.y);	
 			
-			if(tile != null && !tile.environment)
+			if(tile != null && (!tile.environment || tile.movable))
 			{
 				//Collision check
 				p = new Vector2int(pos.x, pos.y);
@@ -31,7 +32,15 @@ public class TileFollow : Tile
 				
 				tile = Level.Instance.GetTile(p.x, p.y);
 				
-				if(tile == null) AddForce(dir.x, dir.y);
+				if(tile != null && tile.movable) 
+				{
+					//Squeezing tiles together
+					tile.AddForce(dir.x, dir.y);
+				}
+				else
+				{
+					AddForce(dir.x, dir.y);
+				}
 			}
 		}
 	}
