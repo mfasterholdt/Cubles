@@ -32,14 +32,15 @@ public class TileFollow : Tile
 				
 				tile = Level.Instance.GetTile(p.x, p.y);
 				
-				if(tile != null && tile.movable) 
-				{
-					//Squeezing tiles together
-					tile.AddForce(dir.x, dir.y);
-				}
-				else
+				if(tile == null ) 
 				{
 					AddForce(dir.x, dir.y);
+					
+				}
+				else if(tile.movable)
+				{
+					 //Squeezing tiles together
+					tile.AddForce(dir.x, dir.y);
 				}
 			}
 		}
