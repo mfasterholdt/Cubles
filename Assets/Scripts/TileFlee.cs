@@ -31,6 +31,12 @@ public class TileFlee : Tile
 				if(tile != null && tile.movable)
 				{
 					tile.AddForce(-dir.x, -dir.y);	
+					
+					//Still push if not environment
+					if(!tile.environment) 
+					{
+						AddForce(-dir.x, -dir.y); 
+					}
 				}
 				else
 				{

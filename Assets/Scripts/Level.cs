@@ -16,7 +16,7 @@ public class Level : SingletonComponent<Level>
 	
 	public Tile[,] world;
 	
-	[HideInInspector]
+	//[HideInInspector]
 	public List<Tile> tiles;
 	
 	private int worldSize = 100;
@@ -30,6 +30,9 @@ public class Level : SingletonComponent<Level>
 	
 	private GameObject pauseText;
 	public GameObject pauseTextPrefab;
+	
+	public List<Merge> allMerges;
+	private List<MergeEntry> mergesToDo = new List<MergeEntry>();
 	
 	void Start () 
 	{
@@ -126,8 +129,11 @@ public class Level : SingletonComponent<Level>
 	}
 	
 	void HandleStep()
-	{		
+	{	
 		Tile tile;
+		
+		//Merges
+		mergesToDo.RemoveAll(x => x.PerformMerge());
 		
 		//Add forces
 		for(int i=0, count = tiles.Count; i < count; i++)
@@ -136,9 +142,12 @@ public class Level : SingletonComponent<Level>
 			
 			tile.SetTileForce();		
 		}
-		
+				
 		//Perform moves
 		List<Tile> list;
+		
+		list = tiles.FindAll(x => !x.movable && x is TileFollow);
+		UpdateList(list);
 		
 		list = tiles.FindAll(x => !x.movable);
 		UpdateList(list);
@@ -164,21 +173,81 @@ public class Level : SingletonComponent<Level>
 		return world[x, y];
 	}
 	
-	public bool AttemptMove(int x, int y, Tile t)
+	public bool AttemptMove(int x, int y, Tile tile)
 	{
 		Tile targetTile = world[x, y];
 		
 		if(targetTile != null)
 		{
-			return false;
+			bool valid  = MergeCheck(tile, targetTile);
+			
+			if(valid)
+			{
+				//Move tile
+				world[tile.pos.x, tile.pos.y] = null;
+				return true;			
+			}
+			else
+			{			
+				return false;
+			}
 		}
 		else
 		{
-			world[t.pos.x, t.pos.y] = null;
+			//Move tile
+			world[tile.pos.x, tile.pos.y] = null;
+			world[x,y] = tile;
 			
-			world[x,y] = t;
+			return true;	
+		}
+	}
+	
+	public bool MergeCheck(Tile tile, Tile target)
+	{
+		MergeEntry entry = null;
+		
+		for(int i=0, count = allMerges.Count; i < count; i++)
+		{
+			Merge merge = allMerges[i];
 			
+			entry = merge.CheckMerge(tile, target);
+			
+			if(entry != null) break;
+		}
+		
+		if(entry != null)
+		{
+			mergesToDo.Add(entry);
 			return true;
 		}
-	}		
+		else
+		{
+			return false;
+		}
+	}
+	
+	public void CreateTile(GameObject prefab, Vector2int p)
+	{
+		Vector3 pos = new Vector3(p.x, 0, p.y);
+		
+		GameObject obj = Instantiate(prefab, pos, Quaternion.identity) as GameObject;
+		Tile newTile = obj.GetComponent<Tile>();
+		
+		obj.transform.parent = transform;
+		obj.name = newTile.GetType().ToString();
+		
+		tiles.Add(newTile);
+		world[p.x, p.y] = newTile;
+		
+		newTile.Initialize();
+	}
+	
+	public void RemoveTile(Tile tile)
+	{
+		world[tile.pos.x, tile.pos.y] = null;
+		
+		tiles.Remove(tile);
+		
+		tile.Remove();
+	}
 }

@@ -55,18 +55,27 @@ public class Tile : WorldObject
 		//Clamp force
 		force.x = Mathf.Clamp(force.x, -1, 1);
 		force.y = Mathf.Clamp(force.y, -1, 1);
-		
-		//Moves
+
+		//Force adjustment mainly for diagonal forces
+		//***Diagonal forces will currently not be influenced by none-environment
 		Tile tileX = Level.Instance.GetTile(pos.x + force.x, pos.y);
-		if(tileX != null) force.x = 0;
+		if(tileX != null && tileX.environment) force.x = 0; 
 		
 		Tile tileY = Level.Instance.GetTile(pos.x, pos.y + force.y);
-		if(tileY != null) force.y = 0;
+		if(tileY != null && tileY.environment) force.y = 0;
 		
+		//Without force there is no movement
+		if(force.x == 0 && force.y == 0)
+		{
+			return false;	
+		}
+		
+		//Add Force
 		Vector2int p = new Vector2int(pos.x, pos.y);
 		p.x += force.x;
 		p.y += force.y;
 		
+		//Collision Check
 		bool valid = Level.Instance.AttemptMove(p.x, p.y, this);
 		
 		if(valid) MoveTile(p);
@@ -91,22 +100,24 @@ public class Tile : WorldObject
 		
 		targetPos = newPos;
 		
-		//transform.position = newPos; //***instant move
-		
 		pos = p;
 	}
 	
 	
-	public void Update()
+	public virtual void FixedUpdate()
 	{
 		if(transform.position != targetPos)
 		{
-			
 			Vector3 pos = transform.position;
 			
-			pos += (targetPos-pos) * Time.fixedDeltaTime * moveSpeed * Level.Instance.moveFactor;
+			pos += (targetPos-pos) * Time.deltaTime * moveSpeed * Level.Instance.moveFactor;
 			
 			transform.position = pos;
 		}
+	}
+	
+	public virtual void Remove()
+	{
+		Destroy(gameObject);
 	}
 }
