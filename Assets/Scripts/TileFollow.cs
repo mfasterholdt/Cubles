@@ -34,13 +34,7 @@ public class TileFollow : Tile
 				
 				if(tile == null ) 
 				{
-					AddForce(dir.x, dir.y);
-					
-				}
-				else if(tile.movable)
-				{
-					 //Squeezing tiles together
-					tile.AddForce(dir.x, dir.y);
+					AddForce(dir.x, dir.y);	
 				}
 			}
 		}
