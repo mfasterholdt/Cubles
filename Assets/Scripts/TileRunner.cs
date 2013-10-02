@@ -8,33 +8,43 @@ public class TileRunner : Tile
 	public override void SetTileForce () 
 	{
 		AddForce(dir.x, dir.y);
-	}
-	
-	public override void UpdateTile()
-	{
-		bool valid = AttempMove(force.x, force.y);
-	
-		if(!valid)
+		
+		//Attractor
+		Vector2int p = new Vector2int(pos.x, pos.y);
+		p.x += dir.x;
+		p.y += dir.y;
+		
+		Tile tile = Level.Instance.GetTile(p.x, p.y);	
+		
+		if(tile != null) 
 		{
-			if(dir.x == 1)
+			if(tile.pushable)
 			{
-				dir.x = 0;
-				dir.y = -1;
+				tile.AddForce(dir.x, dir.y);	
 			}
-			else if(dir.y == -1)
+			else
 			{
-				dir.x = -1;
-				dir.y = 0;
-			}
-			else if(dir.x == -1)
-			{
-				dir.x = 0;
-				dir.y = 1;
-			}
-			else if(dir.y == 1)
-			{
-				dir.x = 1;
-				dir.y = 0;
+				//Clock wise rotation
+				if(dir.x == 1)
+				{
+					dir.x = 0;
+					dir.y = -1;
+				}
+				else if(dir.y == -1)
+				{
+					dir.x = -1;
+					dir.y = 0;
+				}
+				else if(dir.x == -1)
+				{
+					dir.x = 0;
+					dir.y = 1;
+				}
+				else if(dir.y == 1)
+				{
+					dir.x = 1;
+					dir.y = 0;
+				}
 			}
 		}
 	}

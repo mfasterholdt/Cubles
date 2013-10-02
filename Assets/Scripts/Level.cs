@@ -9,17 +9,21 @@ public class Level : SingletonComponent<Level>
 	[HideInInspector]
 	public float moveInterval = 0.2f;
 	
+	public Selection selection;
+	
 	[HideInInspector]
 	public float moveFactor = 1;
 	
 	private float moveTimer;
 	
+	[HideInInspector]	
 	public Tile[,] world;
 	
-	//[HideInInspector]
+	[HideInInspector]
 	public List<Tile> tiles;
 	
-	private int worldSize = 100;
+	[HideInInspector]
+	public static int WorldSize = 100;
 	
 	public Vector2int[] setAdjacent;
 	public static Vector2int[] AdjacentTile;
@@ -34,8 +38,12 @@ public class Level : SingletonComponent<Level>
 	public List<Merge> allMerges;
 	private List<MergeEntry> mergesToDo = new List<MergeEntry>();
 	
+	private Tile pickedTile;
+	
 	void Start () 
 	{
+		if(selection) selection.OnMouseClick += OnSelectionClick;
+		
 		if(pauseTextPrefab)
 		{
 			pauseText = Instantiate(pauseTextPrefab) as GameObject;
@@ -48,9 +56,53 @@ public class Level : SingletonComponent<Level>
 		AdjacentTile = setAdjacent;
 	}
 	
+	void OnSelectionClick(Selection sender, Vector2int pos)
+	{
+		
+		Tile tile = GetTile(pos.x, pos.y);
+		
+		if(!tile)
+		{
+			if(pickedTile)
+			{
+				
+				//Place picked tile
+				pickedTile.transform.position = new Vector3(pos.x, 0, pos.y);
+				Debug.Log(pickedTile + ","+pos, pickedTile);
+				
+				tiles.Add(pickedTile);
+				world[pos.x, pos.y] = pickedTile;
+				
+				pickedTile.Initialize();
+				pickedTile.gameObject.SetActive(true);
+				pickedTile = null;
+			}
+			else
+			{
+				//Raise rock
+				GameObject rockPrefab = PatternManager.Instance.GetTilePrefab(PatternTile.Type.Rock);
+				CreateTile(rockPrefab, pos);
+			}
+		}
+		else if(tile is TileRock)
+		{
+			//Lower Rock
+			RemoveTile(tile);
+		}
+		else if(!pickedTile)
+		{
+			//Pick up tile
+			tile.gameObject.SetActive(false);
+			pickedTile = tile;
+			
+			world[pos.x, pos.y] = null;
+			tiles.Remove(tile);
+		}
+	}
+	
 	void RegisterWorld()
 	{
-		world = new Tile[worldSize, worldSize];
+		world = new Tile[WorldSize, WorldSize];
 		
 		//Tile[] preplaced = GetComponentsInChildren<Tile>();
 		Tile[] preplaced = FindObjectsOfType(typeof(Tile)) as Tile[];
@@ -169,7 +221,7 @@ public class Level : SingletonComponent<Level>
 	
 	public Tile GetTile(int x, int y)
 	{
-		if(x < 0 || x >= worldSize || y < 0 || y >= worldSize) return borderTile;
+		if(x < 0 || x >= WorldSize || y < 0 || y >= WorldSize) return borderTile;
 		
 		return world[x, y];
 	}
@@ -227,8 +279,12 @@ public class Level : SingletonComponent<Level>
 		}
 	}
 	
-	public void CreateTile(GameObject prefab, Vector2int p)
+	public bool CreateTile(GameObject prefab, Vector2int p)
 	{
+		//Occupied
+		if(world[p.x, p.y] != null) return false;
+		
+		//Create tile
 		Vector3 pos = new Vector3(p.x, 0, p.y);
 		
 		GameObject obj = Instantiate(prefab, pos, Quaternion.identity) as GameObject;
@@ -241,6 +297,8 @@ public class Level : SingletonComponent<Level>
 		world[p.x, p.y] = newTile;
 		
 		newTile.Initialize();
+		
+		return true;
 	}
 	
 	public void RemoveTile(Tile tile)
