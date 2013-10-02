@@ -23,7 +23,7 @@ public class TileFollow : Tile
 
 			tile = Level.Instance.GetTile(p.x, p.y);	
 			
-			if(tile != null && (!tile.environment || tile.movable))
+			if(tile != null && (!tile.environment))
 			{
 				//Collision check
 				p = new Vector2int(pos.x, pos.y);

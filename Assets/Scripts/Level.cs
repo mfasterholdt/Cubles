@@ -74,6 +74,7 @@ public class Level : SingletonComponent<Level>
 		//Pause Time
 		if(Input.GetKeyDown(KeyCode.Space))
 		{
+			
 			HandleStep();
 			stepManually = true;
 			
