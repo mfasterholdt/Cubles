@@ -20,7 +20,7 @@ public class TileFlee : Tile
 			
 			tile = Level.Instance.GetTile(p.x, p.y);	
 			
-			if(tile != null && !tile.environment)
+			if(tile != null && tile.organic)
 			{
 				p = new Vector2int(pos.x, pos.y);
 				p.x -= dir.x;
@@ -28,12 +28,12 @@ public class TileFlee : Tile
 				
 				tile = Level.Instance.GetTile(p.x, p.y);
 				
-				if(tile != null && tile.movable)
+				if(tile != null && tile.pushable)
 				{
 					tile.AddForce(-dir.x, -dir.y);	
 					
-					//Still push if not environment
-					if(!tile.environment) 
+					//Still move self if organic
+					if(tile.organic) 
 					{
 						AddForce(-dir.x, -dir.y); 
 					}

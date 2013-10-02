@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class Tile : WorldObject 
 {
-	public bool environment = false;
-	public bool movable = false;
+	public bool organic = true;
+	public bool pushable = false;
 	public GameObject visuals;
 	
 	[HideInInspector]
@@ -57,12 +57,12 @@ public class Tile : WorldObject
 		force.y = Mathf.Clamp(force.y, -1, 1);
 
 		//Force adjustment mainly for diagonal forces
-		//***Diagonal forces will currently not be influenced by none-environment
+		//***Diagonal forces will currently not be influenced organics
 		Tile tileX = Level.Instance.GetTile(pos.x + force.x, pos.y);
-		if(tileX != null && tileX.environment) force.x = 0; 
+		if(tileX != null && !tileX.organic) force.x = 0; 
 		
 		Tile tileY = Level.Instance.GetTile(pos.x, pos.y + force.y);
-		if(tileY != null && tileY.environment) force.y = 0;
+		if(tileY != null && !tileY.organic) force.y = 0;
 		
 		//Without force there is no movement
 		if(force.x == 0 && force.y == 0)

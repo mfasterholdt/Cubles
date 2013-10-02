@@ -147,13 +147,13 @@ public class Level : SingletonComponent<Level>
 		//Perform moves
 		List<Tile> list;
 		
-		list = tiles.FindAll(x => !x.movable && x is TileFollow);
+		list = tiles.FindAll(x => x is TileFollow);
 		UpdateList(list);
 		
-		list = tiles.FindAll(x => !x.movable);
+		list = tiles.FindAll(x => !x.pushable);
 		UpdateList(list);
 		
-		list = tiles.FindAll(x => x.movable);
+		list = tiles.FindAll(x => x.pushable);
 		UpdateList(list);		
 	}
 	

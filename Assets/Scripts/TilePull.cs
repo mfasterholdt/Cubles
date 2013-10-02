@@ -21,7 +21,7 @@ public class TilePull : Tile
 			targetTile = Level.Instance.GetTile(p.x, p.y);	
 				
 			
-			if(targetTile != null && (targetTile.movable || !targetTile.environment))
+			if(targetTile != null && targetTile.pushable)
 			{
 				
 				//Collision check
