@@ -15,7 +15,7 @@ public class Tile : WorldObject
 	protected Vector2int force;
 	protected float moveSpeed = 13f;
 	
-	public void Initialize () 
+	public virtual void Initialize () 
 	{
 		var x = Mathf.RoundToInt(transform.position.x);
 		var y = Mathf.RoundToInt(transform.position.z); 
