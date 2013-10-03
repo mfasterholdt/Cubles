@@ -6,9 +6,14 @@ using System.Linq;
 
 public class Level : SingletonComponent<Level> 
 {
+	public GameObject pauseTextPrefab;
+	public GameObject selectionPrefab;
+	public Tile borderTile;
+	
 	[HideInInspector]
 	public float moveInterval = 0.2f;
 	
+	[HideInInspector]
 	public Selection selection;
 	
 	[HideInInspector]
@@ -27,13 +32,12 @@ public class Level : SingletonComponent<Level>
 	
 	public Vector2int[] setAdjacent;
 	public static Vector2int[] AdjacentTile;
-	public Tile borderTile;
 	
 	[HideInInspector]
 	public bool stepManually;	
 	
 	private GameObject pauseText;
-	public GameObject pauseTextPrefab;
+	
 	
 	public List<Merge> allMerges;
 	private List<MergeEntry> mergesToDo = new List<MergeEntry>();
@@ -42,7 +46,12 @@ public class Level : SingletonComponent<Level>
 	
 	void Start () 
 	{
-		if(selection) selection.OnMouseClick += OnSelectionClick;
+		if(selectionPrefab)
+		{
+			GameObject selectionObj = Instantiate(selectionPrefab) as GameObject;
+			selection = selectionObj.GetComponent<Selection>();
+			selection.OnMouseClick += OnSelectionClick;
+		}
 		
 		if(pauseTextPrefab)
 		{
@@ -68,7 +77,6 @@ public class Level : SingletonComponent<Level>
 				
 				//Place picked tile
 				pickedTile.transform.position = new Vector3(pos.x, 0, pos.y);
-				Debug.Log(pickedTile + ","+pos, pickedTile);
 				
 				tiles.Add(pickedTile);
 				world[pos.x, pos.y] = pickedTile;
