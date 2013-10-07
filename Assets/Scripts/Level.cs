@@ -201,7 +201,7 @@ public class Level : SingletonComponent<Level>
 		{
 			tile = tiles[i];
 			
-			tile.SetTileForce();		
+			tile.UpdateTileForce();		
 		}
 				
 		//Perform moves

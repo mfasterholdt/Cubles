@@ -7,6 +7,7 @@ public class Tile : WorldObject
 	public bool organic = true;
 	public bool pushable = false;
 	public GameObject visuals;
+	public int age = 0;
 	
 	[HideInInspector]
 	public Vector2int pos;
@@ -14,6 +15,7 @@ public class Tile : WorldObject
 	protected Vector3 targetPos;
 	protected Vector2int force;
 	protected float moveSpeed = 13f;
+	protected int ageTimer;
 	
 	public virtual void Initialize () 
 	{
@@ -25,6 +27,8 @@ public class Tile : WorldObject
 		force = new Vector2int(0,0);
 		
 		targetPos = transform.position;
+		
+		ageTimer = age;
 	}
 	
 	public virtual void AddForce(int x, int y)
@@ -32,6 +36,31 @@ public class Tile : WorldObject
 		//Add force
 		force.x += x;
 		force.y += y;
+	}
+	
+	public virtual void UpdateTileForce()
+	{
+		if(CheckAge())
+		{
+			SetTileForce();
+		}
+	}
+	
+	public virtual bool CheckAge()
+	{
+		if(age == 0) return true;
+		
+		if(ageTimer > 0)
+		{
+			ageTimer--;
+			return false;
+		}
+		else
+		{
+			ageTimer = age;
+			return true;
+		}
+		
 	}
 	
 	public virtual void SetTileForce()
