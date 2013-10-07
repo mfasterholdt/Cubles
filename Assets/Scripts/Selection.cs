@@ -9,6 +9,11 @@ public class Selection : WorldObject
 	
 	Vector2int mousePosition;
 	
+	void Start()
+	{
+		Screen.showCursor = false;
+	}
+	
 	void Update () 
 	{
 		MoveSelection();
