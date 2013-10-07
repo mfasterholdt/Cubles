@@ -24,22 +24,31 @@ public class Selection : WorldObject
 	
 	void MoveSelection()
 	{
-		Vector3 p = Camera.main.ScreenToWorldPoint(Input.mousePosition);		
-		int x = Mathf.RoundToInt(p.x);
-		int y = Mathf.RoundToInt(p.z + 12.5f);
-
-		if(x < 0 || x >= Level.WorldSize || y < 0 || y >= Level.WorldSize)
+		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+		RaycastHit hit;
+		
+		if(Physics.Raycast(ray, out hit, Camera.main.farClipPlane))
 		{
-			visuals.SetActive(false);
+			Vector3 p = hit.point;
+			int x = Mathf.RoundToInt(p.x);
+			int y = Mathf.RoundToInt(p.z);
 			
-			mousePosition = null;
-		}
-		else
-		{
-			visuals.SetActive(true);			
 			
-			mousePosition = new Vector2int(x, y);
-			transform.position = new Vector3(mousePosition.x, 0, mousePosition.y);
+			if(x < 0 || x >= Level.WorldSize || y < 0 || y >= Level.WorldSize)
+			{
+				//Out of bounds
+				visuals.SetActive(false);
+				
+				mousePosition = null;
+			}
+			else
+			{
+				//Set cursor
+				visuals.SetActive(true);			
+				
+				mousePosition = new Vector2int(x, y);
+				transform.position = new Vector3(mousePosition.x, 0, mousePosition.y);
+			}	
 		}
 	}
 }
