@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TileWater : EnvironmentTile 
+public class TileHoney : EnvironmentTile 
 {
-
+	
 }
