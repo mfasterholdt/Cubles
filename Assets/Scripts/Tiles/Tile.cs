@@ -115,17 +115,16 @@ public class Tile : WorldObject
 	public virtual void MoveTile(Vector2int p)
 	{
 		Vector3 newPos = new Vector3(p.x, 0, p.y);
-		
 		Vector3 dir = newPos - transform.position;
+		
+		targetPos = newPos;
+		pos = p;
 		
 		if(visuals!=null)
 		{
+			newPos.y = visuals.transform.position.y;
 			visuals.transform.LookAt(newPos + dir);		
 		}
-		
-		targetPos = newPos;
-		
-		pos = p;
 	}
 	
 	
