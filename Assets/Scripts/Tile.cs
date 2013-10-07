@@ -93,10 +93,6 @@ public class Tile : WorldObject
 		{
 			visuals.transform.LookAt(newPos + dir);		
 		}
-		else
-		{
-			transform.LookAt(newPos + dir);		
-		}
 		
 		targetPos = newPos;
 		
