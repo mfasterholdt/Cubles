@@ -3,16 +3,16 @@ using System.Collections;
 
 public class TileRunner : Tile 
 {
-	private Vector2int dir = new Vector2int(1, 0);
+	private Vector2int moveDir = new Vector2int(1, 0);
 	
 	public override void SetTileForce () 
 	{
-		AddForce(dir.x, dir.y);
+		AddForce(moveDir.x, moveDir.y);
 		
 		//Attractor
 		Vector2int p = new Vector2int(pos.x, pos.y);
-		p.x += dir.x;
-		p.y += dir.y;
+		p.x += moveDir.x;
+		p.y += moveDir.y;
 		
 		Tile tile = Level.Instance.GetTile(p.x, p.y);	
 		
@@ -20,30 +20,30 @@ public class TileRunner : Tile
 		{
 			if(tile.pushable)
 			{
-				tile.AddForce(dir.x, dir.y);	
+				tile.AddForce(moveDir.x, moveDir.y);	
 			}
 			else
 			{
 				//Clock wise rotation
-				if(dir.x == 1)
+				if(moveDir.x == 1)
 				{
-					dir.x = 0;
-					dir.y = -1;
+					moveDir.x = 0;
+					moveDir.y = -1;
 				}
-				else if(dir.y == -1)
+				else if(moveDir.y == -1)
 				{
-					dir.x = -1;
-					dir.y = 0;
+					moveDir.x = -1;
+					moveDir.y = 0;
 				}
-				else if(dir.x == -1)
+				else if(moveDir.x == -1)
 				{
-					dir.x = 0;
-					dir.y = 1;
+					moveDir.x = 0;
+					moveDir.y = 1;
 				}
-				else if(dir.y == 1)
+				else if(moveDir.y == 1)
 				{
-					dir.x = 1;
-					dir.y = 0;
+					moveDir.x = 1;
+					moveDir.y = 0;
 				}
 			}
 		}

@@ -8,11 +8,14 @@ public class Tile : WorldObject
 	public bool pushable = false;
 	public GameObject visuals;
 	public int age = 0;
+	public bool debug;
 	
 	[HideInInspector]
 	public Vector2int pos;
 	
 	protected Vector3 targetPos;
+	protected Vector3 dir;
+	
 	protected Vector2int force;
 	protected float moveSpeed = 13f;
 	protected int ageTimer;
@@ -111,20 +114,24 @@ public class Tile : WorldObject
 		
 		return valid;
 	}
-		
+
 	public virtual void MoveTile(Vector2int p)
 	{
+		//Visual move target
 		Vector3 newPos = new Vector3(p.x, 0, p.y);
-		Vector3 dir = newPos - transform.position;
-		
 		targetPos = newPos;
-		pos = p;
 		
+		//Visual Rotation
 		if(visuals!=null)
 		{
-			newPos.y = visuals.transform.position.y;
-			visuals.transform.LookAt(newPos + dir);		
+			dir.x = p.x - pos.x;
+			dir.z = p.y - pos.y;
+			
+			visuals.transform.LookAt(visuals.transform.position + dir);		
 		}
+		
+		//Logic move
+		pos = p;
 	}
 	
 	
