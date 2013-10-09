@@ -8,6 +8,7 @@ public class Selection : WorldObject
 	public event SelectionEventDelegate OnMouseClick;
 	
 	Vector2int mousePosition;
+	bool valid;
 	
 	void Start()
 	{
@@ -18,7 +19,7 @@ public class Selection : WorldObject
 	{
 		MoveSelection();
 		
-		if (mousePosition != null && Input.GetMouseButtonUp(0))
+		if (valid && Input.GetMouseButtonUp(0))
 		{		
 			if(OnMouseClick != null)
 			{
@@ -43,13 +44,15 @@ public class Selection : WorldObject
 			{
 				//Out of bounds
 				visuals.SetActive(false);
+				valid = false;
 				
-				mousePosition = null;
+				mousePosition = Vector2int.zero;
 			}
 			else
 			{
 				//Set cursor
 				visuals.SetActive(true);			
+				valid = true;
 				
 				mousePosition = new Vector2int(x, y);
 				transform.position = new Vector3(mousePosition.x, 0, mousePosition.y);

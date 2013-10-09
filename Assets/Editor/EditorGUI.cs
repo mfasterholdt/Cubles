@@ -11,7 +11,6 @@ public static class EditorGUI
 	{
 		if(!listening)
 		{
-			
 			SceneView.onSceneGUIDelegate += OnDrawGUI;
 			
 			listening = true;

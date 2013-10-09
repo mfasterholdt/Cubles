@@ -23,7 +23,7 @@ public class MergeEntry
 			Level.Instance.RemoveTile(tile);
 			Level.Instance.RemoveTile(target);
 			
-			if(spawnPrefab) Level.Instance.CreateTile(spawnPrefab, target.pos);
+			if(spawnPrefab) Level.Instance.CreateTile(target.pos, spawnPrefab);
 			
 			return true;
 		}

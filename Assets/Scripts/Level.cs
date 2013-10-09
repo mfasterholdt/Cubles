@@ -30,14 +30,10 @@ public class Level : SingletonComponent<Level>
 	[HideInInspector]
 	public static int WorldSize = 100;
 	
-	public Vector2int[] setAdjacent;
-	public static Vector2int[] AdjacentTile;
-	
 	[HideInInspector]
 	public bool stepManually;	
 	
 	private GameObject pauseText;
-	
 	
 	public List<Merge> allMerges;
 	private List<MergeEntry> mergesToDo = new List<MergeEntry>();
@@ -61,14 +57,12 @@ public class Level : SingletonComponent<Level>
 		}
 
 		RegisterWorld();
-		
-		AdjacentTile = setAdjacent;
 	}
 	
 	void OnSelectionClick(Selection sender, Vector2int pos)
 	{
 		
-		Tile tile = GetTile(pos.x, pos.y);
+		Tile tile = GetTile(pos);
 		
 		if(!tile)
 		{
@@ -76,7 +70,7 @@ public class Level : SingletonComponent<Level>
 			{
 				
 				//Place picked tile
-				pickedTile.transform.position = new Vector3(pos.x, 0, pos.y);
+				pickedTile.transform.position = pos.ToVector3();
 				
 				tiles.Add(pickedTile);
 				world[pos.x, pos.y] = pickedTile;
@@ -89,7 +83,7 @@ public class Level : SingletonComponent<Level>
 			{
 				//Raise rock
 				GameObject rockPrefab = PatternManager.Instance.GetTilePrefab(PatternTile.Type.Rock);
-				CreateTile(rockPrefab, pos);
+				CreateTile(pos, rockPrefab);
 			}
 		}
 		else if(tile is TileRock)
@@ -226,7 +220,7 @@ public class Level : SingletonComponent<Level>
 			tile.UpdateTile();
 		}
 	}
-	
+
 	public Tile GetTile(int x, int y)
 	{
 		if(x < 0 || x >= WorldSize || y < 0 || y >= WorldSize) return borderTile;
@@ -234,9 +228,11 @@ public class Level : SingletonComponent<Level>
 		return world[x, y];
 	}
 	
-	public bool AttemptMove(int x, int y, Tile tile)
+	public Tile GetTile(Vector2int pos){ return GetTile(pos.x, pos.y); }
+	
+	public bool AttemptMove(Vector2int pos, Tile tile)
 	{
-		Tile targetTile = world[x, y];
+		Tile targetTile = world[pos.x, pos.y];
 		
 		if(targetTile != null)
 		{
@@ -257,7 +253,7 @@ public class Level : SingletonComponent<Level>
 		{
 			//Move tile
 			world[tile.pos.x, tile.pos.y] = null;
-			world[x,y] = tile;
+			world[pos.x, pos.y] = tile;
 			
 			return true;	
 		}
@@ -287,22 +283,20 @@ public class Level : SingletonComponent<Level>
 		}
 	}
 	
-	public bool CreateTile(GameObject prefab, Vector2int p)
+	public bool CreateTile(Vector2int pos, GameObject prefab)
 	{
 		//Occupied
-		if(world[p.x, p.y] != null) return false;
+		if(world[pos.x, pos.y] != null) return false;
 		
 		//Create tile
-		Vector3 pos = new Vector3(p.x, 0, p.y);
-		
-		GameObject obj = Instantiate(prefab, pos, Quaternion.identity) as GameObject;
+		GameObject obj = Instantiate(prefab, pos.ToVector3(), Quaternion.identity) as GameObject;
 		Tile newTile = obj.GetComponent<Tile>();
 		
 		obj.transform.parent = transform;
 		obj.name = newTile.GetType().ToString();
 		
 		tiles.Add(newTile);
-		world[p.x, p.y] = newTile;
+		world[pos.x, pos.y] = newTile;
 		
 		newTile.Initialize();
 		

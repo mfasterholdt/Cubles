@@ -3,44 +3,33 @@ using System.Collections;
 
 public class TileFlee : Tile 
 {
-		
 	public override void SetTileForce () 
 	{
-		Tile tile;
-		Vector2int p;
-		
-		for(int i=0, count=Level.AdjacentTile.Length; i < count; i++)
+		for(int i=0, count = Vector2int.Adjacent.Length; i < count; i++)
 		{
-			Vector2int dir = Level.AdjacentTile[i];
+			Vector2int dir = Vector2int.Adjacent[i];
 			
 			//Scarer
-			p = new Vector2int(pos.x, pos.y);
-			p.x += dir.x;
-			p.y += dir.y;
-			
-			tile = Level.Instance.GetTile(p.x, p.y);	
+			Tile tile = Level.Instance.GetTile(pos + dir);	
 			
 			if(tile != null && tile.organic)
 			{
-				p = new Vector2int(pos.x, pos.y);
-				p.x -= dir.x;
-				p.y -= dir.y;
-				
-				tile = Level.Instance.GetTile(p.x, p.y);
+				//Collision Check				
+				tile = Level.Instance.GetTile(pos - dir);
 				
 				if(tile != null && tile.pushable)
 				{
-					tile.AddForce(-dir.x, -dir.y);	
+					tile.AddForce(-dir);	
 					
 					//Still move self if organic
 					if(tile.organic) 
 					{
-						AddForce(-dir.x, -dir.y); 
+						AddForce(-dir); 
 					}
 				}
 				else
 				{
-					AddForce(-dir.x, -dir.y);
+					AddForce(-dir);
 				}
 			}
 		}

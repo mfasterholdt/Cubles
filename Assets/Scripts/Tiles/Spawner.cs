@@ -12,12 +12,9 @@ public class Spawner : WorldObject
 	
 	void Start () 
 	{
-		var x = Mathf.RoundToInt(transform.position.x);
-		var y = Mathf.RoundToInt(transform.position.z); 	
+		pos = new Vector2int(transform.position.x, transform.position.z);
 		
-		pos = new Vector2int(x, y);
-		
-		transform.position = new Vector3(x, 0, y);
+		transform.position = pos.ToVector3();
 		spawnTimer = spawnInterval;
 	}
 	
@@ -29,7 +26,7 @@ public class Spawner : WorldObject
 		}
 		else if(full)
 		{
-			Tile tile = Level.Instance.GetTile(pos.x, pos.y);
+			Tile tile = Level.Instance.GetTile(pos);
 			
 			if(tile == null) 
 			{
@@ -39,7 +36,7 @@ public class Spawner : WorldObject
 		}
 		else
 		{
-			bool valid = Level.Instance.CreateTile(spawnPrefab, pos);
+			bool valid = Level.Instance.CreateTile(pos, spawnPrefab);
 			
 			if(valid) full = true;	
 		}

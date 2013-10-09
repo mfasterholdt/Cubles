@@ -22,12 +22,9 @@ public class Tile : WorldObject
 	
 	public virtual void Initialize () 
 	{
-		var x = Mathf.RoundToInt(transform.position.x);
-		var y = Mathf.RoundToInt(transform.position.z); 
+		pos = new Vector2int(transform.position.x, transform.position.z);
 		
-		pos = new Vector2int(x, y);
-		
-		force = new Vector2int(0,0);
+		force = Vector2int.zero;
 		
 		targetPos = transform.position;
 		
@@ -40,6 +37,7 @@ public class Tile : WorldObject
 		force.x += x;
 		force.y += y;
 	}
+	public virtual void AddForce(Vector2int f){	AddForce(f.x, f.y);	}
 	
 	public virtual void UpdateTileForce()
 	{
@@ -73,22 +71,22 @@ public class Tile : WorldObject
 	
 	public virtual void UpdateTile()
 	{
-		if(force.x != 0 || force.y != 0)
+		if(force != Vector2int.zero)
 		{
-			AttempMove(force.x, force.y);
+			AttempMove();
 			
 			force.x = 0;
 			force.y = 0;
 		}
 	}
 	
-	public virtual bool AttempMove(int x, int y)
+	public virtual bool AttempMove()
 	{
 		//Clamp force
-		force.x = Mathf.Clamp(force.x, -1, 1);
-		force.y = Mathf.Clamp(force.y, -1, 1);
-
+		force.Clamp();
+		
 		//Force adjustment mainly for diagonal forces
+		
 		//***Diagonal forces will currently not be influenced organics
 		Tile tileX = Level.Instance.GetTile(pos.x + force.x, pos.y);
 		if(tileX != null && !tileX.organic) force.x = 0; 
@@ -97,18 +95,16 @@ public class Tile : WorldObject
 		if(tileY != null && !tileY.organic) force.y = 0;
 		
 		//Without force there is no movement
-		if(force.x == 0 && force.y == 0)
+		if(force == Vector2int.zero)
 		{
 			return false;	
 		}
 		
 		//Add Force
-		Vector2int p = new Vector2int(pos.x, pos.y);
-		p.x += force.x;
-		p.y += force.y;
+		Vector2int p = pos + force;
 		
 		//Collision Check
-		bool valid = Level.Instance.AttemptMove(p.x, p.y, this);
+		bool valid = Level.Instance.AttemptMove(p, this);
 		
 		if(valid) MoveTile(p);
 		
@@ -118,7 +114,7 @@ public class Tile : WorldObject
 	public virtual void MoveTile(Vector2int p)
 	{
 		//Visual move target
-		Vector3 newPos = new Vector3(p.x, 0, p.y);
+		Vector3 newPos = p.ToVector3();
 		targetPos = newPos;
 		
 		//Visual Rotation
@@ -141,7 +137,7 @@ public class Tile : WorldObject
 		{
 			Vector3 pos = transform.position;
 			
-			pos += (targetPos-pos) * Time.deltaTime * moveSpeed * Level.Instance.moveFactor;
+			pos += (targetPos - pos) * Time.deltaTime * moveSpeed * Level.Instance.moveFactor;
 			
 			transform.position = pos;
 		}

@@ -7,20 +7,16 @@ public class TileRunner : Tile
 	
 	public override void SetTileForce () 
 	{
-		AddForce(moveDir.x, moveDir.y);
+		AddForce(moveDir);
 		
-		//Attractor
-		Vector2int p = new Vector2int(pos.x, pos.y);
-		p.x += moveDir.x;
-		p.y += moveDir.y;
-		
-		Tile tile = Level.Instance.GetTile(p.x, p.y);	
+		//Target
+		Tile tile = Level.Instance.GetTile(pos + moveDir);	
 		
 		if(tile != null) 
 		{
 			if(tile.pushable)
 			{
-				tile.AddForce(moveDir.x, moveDir.y);	
+				tile.AddForce(moveDir);	
 			}
 			else
 			{
