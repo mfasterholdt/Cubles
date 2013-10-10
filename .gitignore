@@ -24,4 +24,4 @@ FailedAssetImports.txt
 \previews\
 \ScriptAssemblies
 obj
-
+*.log
