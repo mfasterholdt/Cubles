@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fa3093b1235428c42aadbe996f944b92
+guid: d7ed6f040f89ace4bb9fbacc10fbc107
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -27,7 +27,7 @@ ModelImporter:
     - name: Bounce
       takeName: Take 001
       firstFrame: 1
-      lastFrame: 96
+      lastFrame: 80
       wrapMode: 2
       orientationOffsetY: 0
       level: 0
