@@ -40,6 +40,8 @@ public class Level : SingletonComponent<Level>
 	
 	private Tile pickedTile;
 	
+	private Resolver resolver;
+	
 	void Start () 
 	{
 		if(selectionPrefab)
@@ -55,8 +57,10 @@ public class Level : SingletonComponent<Level>
 			pauseText.transform.parent = transform;
 			pauseText.name = "GUIPauseText";
 		}
-
+		
 		RegisterWorld();
+		
+		resolver = new Resolver();
 	}
 	
 	void OnSelectionClick(Selection sender, Vector2int pos)
@@ -183,6 +187,32 @@ public class Level : SingletonComponent<Level>
 		}
 	}
 	
+	void NewHandleStep()
+	{	
+		
+		//Add forces
+		tiles.ForEach(x=> x.UpdateTileForce());
+		
+		
+		//***Adjust Forces
+		
+		//***not all existing tiles are taken into consideration?
+		
+		//Populate resolver	
+		resolver.Clear();
+		for(int j=0, count = tiles.Count; j < count; j++)
+		{
+			Tile tile = tiles[j];
+			resolver.AddCheck(tile);
+		}
+		
+		//***Resolve, adjust forces accordingly
+		
+		//***Move Tiles
+		
+		resolver.DebugALl();
+	}
+	
 	void HandleStep()
 	{	
 		Tile tile;
@@ -197,7 +227,7 @@ public class Level : SingletonComponent<Level>
 			
 			tile.UpdateTileForce();		
 		}
-				
+		
 		//Perform moves
 		List<Tile> list;
 		

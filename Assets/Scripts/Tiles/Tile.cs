@@ -41,10 +41,9 @@ public class Tile : WorldObject
 	
 	public virtual void UpdateTileForce()
 	{
-		if(CheckAge())
-		{
-			SetTileForce();
-		}
+		bool valid = CheckAge();
+		
+		if(valid) SetTileForce();
 	}
 	
 	public virtual bool CheckAge()
@@ -69,6 +68,11 @@ public class Tile : WorldObject
 
 	}
 	
+	public virtual Vector2int GetTileForce()
+	{
+		return force;
+	}
+	
 	public virtual void UpdateTile()
 	{
 		if(force != Vector2int.zero)
@@ -78,6 +82,23 @@ public class Tile : WorldObject
 			force.x = 0;
 			force.y = 0;
 		}
+	}
+	
+	public virtual bool AdjustForce()
+	{
+		//***Force clamped
+		
+		//***Diagonal movement reduced by collision check
+		
+		//***Target tile is occupied 
+			//If target is not moving this tile cannot move either
+			//If target is trying to swap places ignore cannot move  
+
+		//Does this object have force
+		if(force != Vector2int.zero)
+			return true;
+		else
+			return false; 
 	}
 	
 	public virtual bool AttempMove()
