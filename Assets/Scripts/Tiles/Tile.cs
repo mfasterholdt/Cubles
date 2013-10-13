@@ -103,7 +103,7 @@ public class Tile : WorldObject
 				force = Vector2int.zero;
 			}
 			
-			//***Prevent object swapping places, might not be possible?
+			//***Prevent objects from swapping places, might not be possible?
 		}
 		
 		//Does this object have force
