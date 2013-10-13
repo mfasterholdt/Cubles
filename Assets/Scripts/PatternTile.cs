@@ -5,8 +5,7 @@ using System.Collections.Generic;
 
 public class PatternTile : WorldObject 
 {
-	
-	public enum Type { Flee, Follow, Gem, Rock, Waiter}
+	public enum Type { Flee, Follow, Gem, Rock, Waiter, Runner, Pull, Push}
 	public enum Shape { Square, Circle, Diamond }
 	public Type type;
 	

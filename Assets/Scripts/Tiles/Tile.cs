@@ -20,6 +20,8 @@ public class Tile : WorldObject
 	protected float moveSpeed = 13f;
 	protected int ageTimer;
 	
+	public enum Direction{Right, Left, Up, Down}
+	
 	public virtual void Initialize () 
 	{
 		pos = new Vector2int(transform.position.x, transform.position.z);
@@ -37,13 +39,14 @@ public class Tile : WorldObject
 		force.x += x;
 		force.y += y;
 	}
+	
 	public virtual void AddForce(Vector2int f){	AddForce(f.x, f.y);	}
 	
-	public virtual void UpdateTileForce()
+	public virtual void HandleForce()
 	{
 		bool valid = CheckAge();
 		
-		if(valid) SetTileForce();
+		if(valid) CalculateForce();
 	}
 	
 	public virtual bool CheckAge()
@@ -63,7 +66,7 @@ public class Tile : WorldObject
 		
 	}
 	
-	public virtual void SetTileForce()
+	public virtual void CalculateForce()
 	{
 
 	}
@@ -73,27 +76,36 @@ public class Tile : WorldObject
 		return force;
 	}
 	
-	public virtual void UpdateTile()
+	public virtual void SetTileForce(Vector2int f)
 	{
-		if(force != Vector2int.zero)
-		{
-			AttempMove();
-			
-			force.x = 0;
-			force.y = 0;
-		}
+		force = f;
 	}
 	
 	public virtual bool AdjustForce()
 	{
-		//***Force clamped
-		
-		//***Diagonal movement reduced by collision check
-		
-		//***Target tile is occupied 
-			//If target is not moving this tile cannot move either
-			//If target is trying to swap places ignore cannot move  
+		//Clamp force
+		force.Clamp();
 
+		//Force adjustment mainly for diagonal forces
+		Tile tileX = Level.Instance.GetTile(pos.x + force.x, pos.y);
+		if(tileX != null && tileX.GetTileForce() == Vector2int.zero && !tileX.pushable) force.x = 0; 
+		
+		Tile tileY = Level.Instance.GetTile(pos.x, pos.y + force.y);
+		if(tileY != null && tileY.GetTileForce() == Vector2int.zero && !tileY.pushable) force.y = 0;
+		
+		//Target occupied
+		Tile tile = Level.Instance.GetTile(pos + force);
+		if(tile != null)
+		{
+			//Target static
+			if(tile.GetTileForce() == Vector2int.zero)
+			{
+				force = Vector2int.zero;
+			}
+			
+			//***Prevent object swapping places, might not be possible?
+		}
+		
 		//Does this object have force
 		if(force != Vector2int.zero)
 			return true;
@@ -101,37 +113,6 @@ public class Tile : WorldObject
 			return false; 
 	}
 	
-	public virtual bool AttempMove()
-	{
-		//Clamp force
-		force.Clamp();
-		
-		//Force adjustment mainly for diagonal forces
-		
-		//***Diagonal forces will currently not be influenced organics
-		Tile tileX = Level.Instance.GetTile(pos.x + force.x, pos.y);
-		if(tileX != null && !tileX.organic) force.x = 0; 
-		
-		Tile tileY = Level.Instance.GetTile(pos.x, pos.y + force.y);
-		if(tileY != null && !tileY.organic) force.y = 0;
-		
-		//Without force there is no movement
-		if(force == Vector2int.zero)
-		{
-			return false;	
-		}
-		
-		//Add Force
-		Vector2int p = pos + force;
-		
-		//Collision Check
-		bool valid = Level.Instance.AttemptMove(p, this);
-		
-		if(valid) MoveTile(p);
-		
-		return valid;
-	}
-
 	public virtual void MoveTile(Vector2int p)
 	{
 		//Visual move target
@@ -151,6 +132,33 @@ public class Tile : WorldObject
 		pos = p;
 	}
 	
+	public virtual Vector2int HandleMove()
+	{
+		Vector2int p = pos + force;
+		
+		//Visual move target
+		Vector3 newPos = p.ToVector3();
+		targetPos = newPos;
+		
+		//Visual Rotation
+		if(visuals!=null)
+		{
+			dir.x = p.x - pos.x;
+			dir.z = p.y - pos.y;
+			
+			visuals.transform.LookAt(visuals.transform.position + dir);		
+		}
+		
+		//Logic move
+		pos = p;
+		
+		return p;
+	}
+	
+	public virtual void HandleEnd()
+	{
+		force = Vector2int.zero;
+	}
 	
 	public virtual void FixedUpdate()
 	{
@@ -164,8 +172,21 @@ public class Tile : WorldObject
 		}
 	}
 	
+	public static Vector2int GetDirectionVector(Tile.Direction d)
+	{
+		if(d == Tile.Direction.Up)
+			return Vector2int.up;
+		else if(d == Tile.Direction.Down)
+			return Vector2int.down;
+		else if(d == Tile.Direction.Left)
+			return Vector2int.left;
+		else 
+			return Vector2int.right;
+	}
+	
 	public virtual void Remove()
 	{
+		
 		Destroy(gameObject);
 	}
 }

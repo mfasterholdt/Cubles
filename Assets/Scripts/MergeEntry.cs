@@ -7,7 +7,6 @@ public class MergeEntry
 	public Tile target;
 	
 	public GameObject spawnPrefab;
-	private int wait = 0;
 	
 	public MergeEntry(Tile tile, Tile target, GameObject spawnPrefab)
 	{
@@ -18,19 +17,11 @@ public class MergeEntry
 	
 	public bool PerformMerge()
 	{
-		if(wait <= 0)
-		{
-			Level.Instance.RemoveTile(tile);
-			Level.Instance.RemoveTile(target);
-			
-			if(spawnPrefab) Level.Instance.CreateTile(target.pos, spawnPrefab);
-			
-			return true;
-		}
-		else
-		{
-			wait--;
-			return false;
-		}
+		Level.Instance.RemoveTile(tile);
+		Level.Instance.RemoveTile(target);
+		
+		if(spawnPrefab) Level.Instance.CreateTile(target.pos, spawnPrefab);
+		
+		return true;
 	}
 }

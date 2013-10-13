@@ -3,7 +3,7 @@ using System.Collections;
 
 public class TilePull : Tile 
 {
-	public override void SetTileForce () 
+	public override void CalculateForce () 
 	{
 		for(int i = 0, count = Vector2int.Adjacent.Length; i < count; i++)
 		{

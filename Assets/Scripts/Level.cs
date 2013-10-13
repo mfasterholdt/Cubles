@@ -35,12 +35,12 @@ public class Level : SingletonComponent<Level>
 	
 	private GameObject pauseText;
 	
-	public List<Merge> allMerges;
-	private List<MergeEntry> mergesToDo = new List<MergeEntry>();
-	
 	private Tile pickedTile;
 	
 	private Resolver resolver;
+	
+	public delegate void StepEvent();
+	public event StepEvent OnStep;
 	
 	void Start () 
 	{
@@ -60,12 +60,11 @@ public class Level : SingletonComponent<Level>
 		
 		RegisterWorld();
 		
-		resolver = new Resolver();
+		resolver = GetComponent<Resolver>(); 
 	}
 	
 	void OnSelectionClick(Selection sender, Vector2int pos)
 	{
-		
 		Tile tile = GetTile(pos);
 		
 		if(!tile)
@@ -116,12 +115,20 @@ public class Level : SingletonComponent<Level>
 		for(int i=0, count = preplaced.Length; i<count; i++)
 		{
 			Tile tile = preplaced[i];
-			
 			tile.Initialize();
 			
-			world[tile.pos.x, tile.pos.y] = tile;
+			Tile current = world[tile.pos.x, tile.pos.y];
 			
-			tiles.Add(tile);
+			if(current != null)
+			{
+				Debug.LogError("Overlapping tiles "+current, current.gameObject);	
+			}
+			else
+			{
+				world[tile.pos.x, tile.pos.y] = tile;
+				
+				tiles.Add(tile);
+			}
 		}
 	}
 	
@@ -187,70 +194,46 @@ public class Level : SingletonComponent<Level>
 		}
 	}
 	
-	void NewHandleStep()
-	{	
-		
-		//Add forces
-		tiles.ForEach(x=> x.UpdateTileForce());
-		
-		
-		//***Adjust Forces
-		
-		//***not all existing tiles are taken into consideration?
-		
-		//Populate resolver	
-		resolver.Clear();
-		for(int j=0, count = tiles.Count; j < count; j++)
-		{
-			Tile tile = tiles[j];
-			resolver.AddCheck(tile);
-		}
-		
-		//***Resolve, adjust forces accordingly
-		
-		//***Move Tiles
-		
-		resolver.DebugALl();
-	}
-	
 	void HandleStep()
 	{	
-		Tile tile;
+		//Global event
+		if(OnStep != null) OnStep();
 		
-		//Merges
-		mergesToDo.RemoveAll(x => x.PerformMerge());
+		//Perform Merges
+		resolver.HandlePerformMerges();
 		
 		//Add forces
-		for(int i=0, count = tiles.Count; i < count; i++)
-		{
-			tile = tiles[i];
-			
-			tile.UpdateTileForce();		
-		}
+		tiles.ForEach(x=> x.HandleForce());
 		
-		//Perform moves
-		List<Tile> list;
+		//Adjust forces
+		List<Tile> movingTiles = tiles.FindAll(x => x.AdjustForce());
 		
-		list = tiles.FindAll(x => x is TileFollow);
-		UpdateList(list);
+		//Resolve conflicts and merges
+		resolver.HandleResolve(tiles);
 		
-		list = tiles.FindAll(x => !x.pushable);
-		UpdateList(list);
+		//Move Tiles
+		movingTiles.ForEach(x => MoveTile(x));
 		
-		list = tiles.FindAll(x => x.pushable);
-		UpdateList(list);		
+		//Handle End
+		movingTiles.ForEach(x => x.HandleEnd());
 	}
 	
-	void UpdateList(List<Tile> list)
+	//Move Tile
+	public void MoveTile(Tile tile)
 	{
-		for(int i=0, count = list.Count; i < count; i++)
-		{
-			Tile tile = list[i];
-			
-			tile.UpdateTile();
-		}
+		//Clear origin
+		Tile origin = world[tile.pos.x, tile.pos.y];
+		if(origin == tile) world[tile.pos.x, tile.pos.y] = null;
+		
+		//Move
+		Vector2int pos = tile.HandleMove();
+		
+		world[pos.x, pos.y] = tile;
+		
+		tile.MoveTile(pos);
 	}
-
+	
+	//Get Tile From World 
 	public Tile GetTile(int x, int y)
 	{
 		if(x < 0 || x >= WorldSize || y < 0 || y >= WorldSize) return borderTile;
@@ -260,59 +243,7 @@ public class Level : SingletonComponent<Level>
 	
 	public Tile GetTile(Vector2int pos){ return GetTile(pos.x, pos.y); }
 	
-	public bool AttemptMove(Vector2int pos, Tile tile)
-	{
-		Tile targetTile = world[pos.x, pos.y];
-		
-		if(targetTile != null)
-		{
-			bool valid  = MergeCheck(tile, targetTile);
-			
-			if(valid)
-			{
-				//Move tile
-				world[tile.pos.x, tile.pos.y] = null;
-				return true;			
-			}
-			else
-			{			
-				return false;
-			}
-		}
-		else
-		{
-			//Move tile
-			world[tile.pos.x, tile.pos.y] = null;
-			world[pos.x, pos.y] = tile;
-			
-			return true;	
-		}
-	}
-	
-	public bool MergeCheck(Tile tile, Tile target)
-	{
-		MergeEntry entry = null;
-		
-		for(int i=0, count = allMerges.Count; i < count; i++)
-		{
-			Merge merge = allMerges[i];
-			
-			entry = merge.CheckMerge(tile, target);
-			
-			if(entry != null) break;
-		}
-		
-		if(entry != null)
-		{
-			mergesToDo.Add(entry);
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
+	//Create Tile
 	public bool CreateTile(Vector2int pos, GameObject prefab)
 	{
 		//Occupied
@@ -333,6 +264,7 @@ public class Level : SingletonComponent<Level>
 		return true;
 	}
 	
+	//Remove Tile
 	public void RemoveTile(Tile tile)
 	{
 		world[tile.pos.x, tile.pos.y] = null;

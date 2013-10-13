@@ -12,11 +12,9 @@ public class TileGem : Tile
 			//Propegate force
 			tile.AddForce(x, y);
 		}
-		else if(tile == null)
-		{
-			//Only add force on empty
-			force.x += x;
-			force.y += y;
-		}
+		
+		//Add force
+		force.x += x;
+		force.y += y;
 	}
 }

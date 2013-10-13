@@ -26,7 +26,7 @@ public class Merge
 		}
 	}
 	
-	bool TilesMatch(Tile t, Tile tar)
+	public bool TilesMatch(Tile t, Tile tar)
 	{
 		bool valid = t.GetType() == tile.GetType() && tar.GetType() == target.GetType();
 		bool validSwap = t.GetType() == target.GetType() && tar.GetType() == tile.GetType();

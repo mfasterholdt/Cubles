@@ -4,9 +4,9 @@ using System.Collections;
 public class Spawner : WorldObject 
 {
 	public GameObject spawnPrefab;
-	public float spawnInterval = 5f;
+	public int spawnInterval = 15;
 	
-	private float spawnTimer;
+	private int spawnTimer;
 	private Vector2int pos;
 	private bool full;
 	
@@ -16,13 +16,15 @@ public class Spawner : WorldObject
 		
 		transform.position = pos.ToVector3();
 		spawnTimer = spawnInterval;
+		
+		Level.Instance.OnStep += OnStep;
 	}
 	
-	void FixedUpdate () 
+	void OnStep()
 	{
 		if(spawnTimer > 0)
 		{
-			spawnTimer -= Time.deltaTime;
+			spawnTimer--;
 		}
 		else if(full)
 		{

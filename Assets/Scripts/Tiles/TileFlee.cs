@@ -3,7 +3,7 @@ using System.Collections;
 
 public class TileFlee : Tile 
 {
-	public override void SetTileForce () 
+	public override void CalculateForce () 
 	{
 		for(int i=0, count = Vector2int.Adjacent.Length; i < count; i++)
 		{
@@ -19,6 +19,7 @@ public class TileFlee : Tile
 				
 				if(tile != null && tile.pushable)
 				{
+					//Push Tile
 					tile.AddForce(-dir);	
 					
 					//Still move self if organic

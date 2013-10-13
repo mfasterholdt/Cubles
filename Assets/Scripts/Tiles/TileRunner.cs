@@ -3,45 +3,70 @@ using System.Collections;
 
 public class TileRunner : Tile 
 {
-	private Vector2int moveDir = new Vector2int(1, 0);
+	public Tile.Direction setMoveDir;
 	
-	public override void SetTileForce () 
+	private Vector2int moveDir;
+	
+	//private Vector2int pushedPreviousPos;
+	
+	private Tile shouldMove;
+	private Vector2int previousPos;
+	
+	//private bool rotationCheck;
+	
+	public override void Initialize ()
 	{
-		AddForce(moveDir);
+		base.Initialize ();
 		
-		//Target
+		moveDir = Tile.GetDirectionVector(setMoveDir);	
+		//rotationCheck = 1;
+	}
+	
+	public override void CalculateForce () 
+	{		
+		//Rotate if blocked	
+		if(shouldMove && shouldMove.pos == previousPos)
+		{
+			Rotate();	
+		}
+		
+		//Push
 		Tile tile = Level.Instance.GetTile(pos + moveDir);	
 		
-		if(tile != null) 
+		if(tile != null && tile.pushable)
 		{
-			if(tile.pushable)
-			{
-				tile.AddForce(moveDir);	
-			}
-			else
-			{
-				//Clock wise rotation
-				if(moveDir.x == 1)
-				{
-					moveDir.x = 0;
-					moveDir.y = -1;
-				}
-				else if(moveDir.y == -1)
-				{
-					moveDir.x = -1;
-					moveDir.y = 0;
-				}
-				else if(moveDir.x == -1)
-				{
-					moveDir.x = 0;
-					moveDir.y = 1;
-				}
-				else if(moveDir.y == 1)
-				{
-					moveDir.x = 1;
-					moveDir.y = 0;
-				}
-			}
+			tile.AddForce(moveDir);	
+			shouldMove = tile;
+		}
+		else
+		{
+			AddForce(moveDir);
+			shouldMove = this;
+		}			
+		
+		
+		previousPos = shouldMove.pos;
+	}
+	
+	
+	public void Rotate()
+	{
+		//Clock wise rotation
+		if(moveDir == Vector2int.up)
+		{
+			moveDir = Vector2int.right;
+		}
+		else if(moveDir == Vector2int.right)
+		{
+			moveDir = Vector2int.down;
+		}
+		else if(moveDir == Vector2int.down)
+		{
+			moveDir = Vector2int.left;
+		}
+		else if(moveDir == Vector2int.left)
+		{
+			moveDir = Vector2int.up;
 		}
 	}
 }
