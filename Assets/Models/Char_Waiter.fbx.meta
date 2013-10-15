@@ -1,30 +1,23 @@
 fileFormatVersion: 2
-guid: 111fe268dc43c9348b9dd3f17c64af74
+guid: 859cab5aeea8dac4582c29f9012c464a
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Char_DustHuggerArmL
-    100004: Char_DustHuggerArmR
-    100006: Hat
+    100002: Cube
+    100004: Hair
     400000: //RootNode
-    400002: Char_DustHuggerArmL
-    400004: Char_DustHuggerArmR
-    400006: Hat
-    2300000: //RootNode
-    2300002: Char_DustHuggerArmL
-    2300004: Char_DustHuggerArmR
-    2300006: Hat
-    3300000: //RootNode
-    3300002: Char_DustHuggerArmL
-    3300004: Char_DustHuggerArmR
-    3300006: Hat
-    4300000: Char_DustHugger
-    4300002: Char_DustHuggerArmL
-    4300004: Char_DustHuggerArmR
-    4300006: Hat
-    7400000: Move
-    7400002: Collide
+    400002: Cube
+    400004: Hair
+    2300000: Cube
+    2300002: Hair
+    2300004: //RootNode
+    3300000: Cube
+    3300002: Hair
+    3300004: //RootNode
+    4300000: Cube
+    4300002: Hair
+    7400000: Bounce
     9500000: //RootNode
     11100000: //RootNode
   materials:
@@ -40,32 +33,11 @@ ModelImporter:
     animationScaleError: .5
     animationWrapMode: 2
     clipAnimations:
-    - name: Move
+    - name: Bounce
       takeName: Take 001
       firstFrame: 1
-      lastFrame: 18
+      lastFrame: 50
       wrapMode: 2
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      transformMask: []
-    - name: Collide
-      takeName: Take 001
-      firstFrame: 20
-      lastFrame: 40
-      wrapMode: 1
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
