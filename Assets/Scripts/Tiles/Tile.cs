@@ -21,6 +21,7 @@ public class Tile : WorldObject
 	protected int ageTimer;
 	
 	public enum Direction{Right, Left, Up, Down}
+	public bool roll;
 	
 	public virtual void Initialize () 
 	{
@@ -157,7 +158,10 @@ public class Tile : WorldObject
 	
 	public virtual void HandleEnd()
 	{
-		force = Vector2int.zero;
+		if(!roll)
+		{
+			force = Vector2int.zero;
+		}
 	}
 	
 	public virtual void FixedUpdate()
