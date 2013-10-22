@@ -28,7 +28,7 @@ public class Level : SingletonComponent<Level>
 	public List<Tile> tiles;
 	
 	[HideInInspector]
-	public static int WorldSize = 100;
+	public static int WorldSize = 300;
 	
 	[HideInInspector]
 	public bool stepManually;	
