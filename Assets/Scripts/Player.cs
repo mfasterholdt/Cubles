@@ -6,10 +6,10 @@ public class Player : Tile
 	public GameObject cameraFollow;
 	public Vector3 cameraOffset;
 	
-	private float playerMoveSpeed = 3.75f;
+	private float playerMoveSpeed = 5f;
 	private Vector3 moveDir;
 	private Vector2int pushDir; 
-	
+	private float visualSquish = 10f;
 	public override void Initialize ()
 	{
 		base.Initialize ();
@@ -44,9 +44,15 @@ public class Player : Tile
 	
 	public override Vector2int HandleMove()
 	{
-		pos += force;
+		Vector2int p = pos + force;
 		
-		return pos;
+		//Visual move target
+		Vector3 newPos = p.ToVector3();
+		targetPos = newPos;
+		
+		pos = p;
+		
+		return p;
 	}
 	
 	public override void FixedUpdate()
@@ -54,7 +60,19 @@ public class Player : Tile
 		moveDir.x = Input.GetAxis("Horizontal");
 		moveDir.z = Input.GetAxis("Vertical");
 		
-		if(Mathf.Abs(moveDir.x) > 0.5f || Mathf.Abs(moveDir.z) > 0.5f)
+		Vector3 s = visuals.transform.localScale;
+		s.x = 1;
+		s.z = 1;
+		
+		s.z += Mathf.Abs(moveDir.z) / visualSquish;
+		s.x -= Mathf.Abs(moveDir.z) / visualSquish;
+		
+		s.x -= Mathf.Abs(moveDir.x) / visualSquish;
+		s.z += Mathf.Abs(moveDir.x) / visualSquish;
+		
+		visuals.transform.localScale = s;
+		
+		if(Mathf.Abs(moveDir.x) > 0.3f || Mathf.Abs(moveDir.z) > 0.3f)
 		{
 			Vector3 lookAt = visuals.transform.position + moveDir.normalized;
 				
@@ -62,9 +80,23 @@ public class Player : Tile
 		}
 		
 		Vector2int checkPos = pos;
-
+		
+		if(moveDir.x != 0 && moveDir.z != 0)
+		{
+			checkPos.x += (int)Mathf.Sign(moveDir.x);
+			checkPos.y += (int)Mathf.Sign(moveDir.z);
+			Tile tile = Level.Instance.GetTile(checkPos);
+			
+			if(tile)
+			{
+				moveDir.x = 0;	
+				moveDir.z = 0;	
+			}
+		}
+		
 		if(moveDir.x != 0)
 		{
+			checkPos = pos;
 			checkPos.x += (int)Mathf.Sign(moveDir.x);
 			Tile tile = Level.Instance.GetTile(checkPos);
 			
@@ -90,11 +122,10 @@ public class Player : Tile
 					moveDir.z = 0;	
 				}
 			}
-		}	
+		}
 
-		
 		transform.position += moveDir * Time.deltaTime * playerMoveSpeed;
-		
+
 		if(cameraFollow)
 		{
 			Vector3 camPos = cameraFollow.transform.position;
