@@ -67,6 +67,15 @@ public class Tile : WorldObject
 		
 	}
 	
+	public virtual void GainSpark(int x, int y)
+	{
+	}
+	
+	public virtual void GainSpark(Vector2int dir)
+	{
+		GainSpark(dir.x, dir.y);
+	}
+	
 	public virtual void CalculateForce()
 	{
 
