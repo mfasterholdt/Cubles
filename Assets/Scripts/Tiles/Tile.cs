@@ -23,6 +23,10 @@ public class Tile : WorldObject
 	public enum Direction{Right, Left, Up, Down}
 	public bool roll;
 	
+	protected bool sparking;
+	protected int countSparks;
+	//protected Vector2int sparkForce;
+	
 	public virtual void Initialize () 
 	{
 		pos = new Vector2int(transform.position.x, transform.position.z);
@@ -67,13 +71,12 @@ public class Tile : WorldObject
 		
 	}
 	
-	public virtual void GainSpark(int x, int y)
+	public virtual void GainSpark(Vector2int dir)
 	{
 	}
 	
-	public virtual void GainSpark(Vector2int dir)
+	public virtual void LoseSpark()
 	{
-		GainSpark(dir.x, dir.y);
 	}
 	
 	public virtual void CalculateForce()
@@ -165,6 +168,10 @@ public class Tile : WorldObject
 		return p;
 	}
 	
+	public virtual void HandlePrepare()
+	{
+	}
+	
 	public virtual void HandleEnd()
 	{
 		if(!roll)
@@ -197,9 +204,17 @@ public class Tile : WorldObject
 			return Vector2int.right;
 	}
 	
+	void OnDrawGizmos()
+	{
+		if(sparking)
+		{
+			Gizmos.color = new Color(1, 1, 1, 0.35f);
+			Gizmos.DrawSphere(visuals.transform.position + Vector3.up * 0.6f, 0.65f);
+		}
+	}
+	
 	public virtual void Remove()
 	{
-		
 		Destroy(gameObject);
 	}
 }
