@@ -202,6 +202,9 @@ public class Level : SingletonComponent<Level>
 		//Perform Merges
 		resolver.HandlePerformMerges();
 		
+		//Prepare Step
+		tiles.ForEach(x => x.HandlePrepare());
+		
 		//Add forces
 		tiles.ForEach(x=> x.HandleForce());
 		
