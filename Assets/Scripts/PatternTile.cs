@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -23,8 +22,8 @@ public class PatternTile : WorldObject
 	
 	void OnDrawGizmos()
 	{
-		if(EditorApplication.isPlaying) return;
-
+		if(Application.isPlaying) return;
+		
 		if(info == null || info.type != type)
 		{
 			gameObject.name = "Tile"+type;

@@ -13,6 +13,7 @@ public class TileParserStatic : Tile
 		{
 			GainSpark(Vector2int.zero);
 			sparking = true;
+			sparkEffect.renderer.enabled = true;
 		}
 	}
 	
@@ -50,10 +51,12 @@ public class TileParserStatic : Tile
 		{
 			countSparks = 1; //Absorb all but one spark
 			sparking = true;
+			sparkEffect.renderer.enabled = true;
 		}
 		else
 		{
 			sparking = false;
+			sparkEffect.renderer.enabled = false;
 		}
 	}
 	

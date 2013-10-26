@@ -9,6 +9,7 @@ public class Tile : WorldObject
 	public GameObject visuals;
 	public int age = 0;
 	public bool debug;
+	public GameObject sparkEffect;
 	
 	[HideInInspector]
 	public Vector2int pos;
@@ -208,8 +209,8 @@ public class Tile : WorldObject
 	{
 		if(sparking)
 		{
-			Gizmos.color = new Color(1, 1, 1, 0.35f);
-			Gizmos.DrawSphere(visuals.transform.position + Vector3.up * 0.6f, 0.65f);
+			//Gizmos.color = new Color(1, 1, 1, 0.35f);		
+			//Gizmos.DrawSphere(visuals.transform.position + Vector3.up * 0.6f, 0.65f);
 		}
 	}
 	

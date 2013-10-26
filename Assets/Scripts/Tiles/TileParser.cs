@@ -16,6 +16,7 @@ public class TileParser : Tile
 		{
 			GainSpark(moveDir);
 			sparking = true;
+			sparkEffect.renderer.enabled = true;
 		}
 	}
 	
@@ -53,16 +54,13 @@ public class TileParser : Tile
 		{
 			countSparks = 1; //Absorb all but one spark
 			sparking = true;
-			/*if(sparkForce != Vector2int.zero)
-			{
-				AddForce(sparkForce);
-				sparkForce = Vector2int.zero;
-			}*/
+			sparkEffect.renderer.enabled = true;
 		}
 		else
 		{
 			force = Vector2int.zero;
 			sparking = false;
+			sparkEffect.renderer.enabled = false;
 		}
 	}
 	
@@ -77,18 +75,7 @@ public class TileParser : Tile
 		
 		countSparks++;
 	}
-	
-	/*public void SwapDirection()
-	{
-		//U-turn
-		moveDir = moveDir * -1;
-		
-		if(visuals != null)
-		{
-			visuals.transform.LookAt(visuals.transform.position + moveDir.ToVector3());		
-		}
-	}*/
-	
+
 	public override void HandleEnd()
 	{
 		
