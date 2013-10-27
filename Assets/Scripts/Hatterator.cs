@@ -46,6 +46,7 @@ public class Hatterator : MonoBehaviour
 		{
 			newHat.transform.parent = tile.transform;
 		}
+		
 		newHat.Setup(tile);
 	}
 }

@@ -7,8 +7,8 @@ public class Hat : MonoBehaviour
 	
 	public Material[] materials;
 	
-	private float minRotation = -15f;
-	private float maxRotation = 15f;
+	private float minRotation = -10f;
+	private float maxRotation = 10f;
 	private float minScale = 0.9f;
 	private float maxScale = 1.2f;
 	
