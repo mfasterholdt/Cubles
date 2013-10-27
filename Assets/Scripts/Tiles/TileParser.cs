@@ -16,7 +16,11 @@ public class TileParser : Tile
 		{
 			GainSpark(moveDir);
 			sparking = true;
-			sparkEffect.renderer.enabled = true;
+			sparkEffect.SetActive(true);
+		}
+		else
+		{
+			sparkEffect.SetActive(false);
 		}
 	}
 	
@@ -54,13 +58,13 @@ public class TileParser : Tile
 		{
 			countSparks = 1; //Absorb all but one spark
 			sparking = true;
-			sparkEffect.renderer.enabled = true;
+			sparkEffect.SetActive(true);
 		}
 		else
 		{
 			force = Vector2int.zero;
 			sparking = false;
-			sparkEffect.renderer.enabled = false;
+			sparkEffect.SetActive(false);
 		}
 	}
 	
