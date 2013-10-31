@@ -5,11 +5,12 @@ public class Player : Tile
 {
 	public GameObject cameraFollow;
 	public Vector3 cameraOffset;
+	public float visualSquish = 10f;
 	
 	private float playerMoveSpeed = 5f;
 	private Vector3 moveDir;
 	private Vector2int pushDir; 
-	private float visualSquish = 10f;
+	
 	public override void Initialize ()
 	{
 		base.Initialize ();
@@ -28,7 +29,7 @@ public class Player : Tile
 		if(tile != null && tile.pushable)
 		{
 			tile.AddForce(pushDir);	
-		}
+		}	
 		
 		Vector2int path;
 		path.x = Mathf.RoundToInt(transform.position.x - pos.x);
@@ -60,17 +61,20 @@ public class Player : Tile
 		moveDir.x = Input.GetAxis("Horizontal");
 		moveDir.z = Input.GetAxis("Vertical");
 		
-		Vector3 s = visuals.transform.localScale;
-		s.x = 1;
-		s.z = 1;
-		
-		s.z += Mathf.Abs(moveDir.z) / visualSquish;
-		s.x -= Mathf.Abs(moveDir.z) / visualSquish;
-		
-		s.x -= Mathf.Abs(moveDir.x) / visualSquish;
-		s.z += Mathf.Abs(moveDir.x) / visualSquish;
-		
-		visuals.transform.localScale = s;
+		if(visualSquish > 0)
+		{
+			Vector3 s = visuals.transform.localScale;
+			s.x = 1;
+			s.z = 1;
+			
+			s.z += Mathf.Abs(moveDir.z) / visualSquish;
+			s.x -= Mathf.Abs(moveDir.z) / visualSquish;
+			
+			s.x -= Mathf.Abs(moveDir.x) / visualSquish;
+			s.z += Mathf.Abs(moveDir.x) / visualSquish;
+			
+			visuals.transform.localScale = s;
+		}
 		
 		if(Mathf.Abs(moveDir.x) > 0.3f || Mathf.Abs(moveDir.z) > 0.3f)
 		{
